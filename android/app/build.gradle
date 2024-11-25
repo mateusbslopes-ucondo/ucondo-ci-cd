@@ -80,6 +80,9 @@ def enableProguardInReleaseBuilds = (findProperty('android.enableProguardInRelea
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
 
+def date = new Date()
+def formattedDate = date.format('yyyyMMddHHmmss')
+
 android {
     ndkVersion rootProject.ext.ndkVersion
 
@@ -93,6 +96,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0.0"
+        setProperty("archivesBaseName", "${applicationId}_${System.getenv('EXPO_PUBLIC_WHITELABEL')}_${formattedDate}")
     }
     signingConfigs {
         debug {
