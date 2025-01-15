@@ -12,8 +12,8 @@ parameters:
       - name: mrv
 
 stages: 
-  - stage: 'prebuild'
-    jobs: 
+  - stage: 'build'
+    jobs:
       - job: 'prebuild'
         steps:
         - task: NodeTool@0
@@ -24,23 +24,17 @@ stages:
         - script: yarn install
           displayName: Install Dependencies
 
-  - stage: 'build'
-    dependsOn: 'prebuild'
-    jobs:
       - ${{ each whitelabel in parameters.whitelabels }}:
         - job: 'run_for_each_whitelabel_${{ whitelabel.name }}'
           displayName: 'Using ${{ whitelabel.name }} whitelabel'
           steps:
             - script: cd android && EXPO_PUBLIC_WHITELABEL=${{ whitelabel.name }} && ./gradlew app:assembleRelease
 
-  - stage: 'publish'
-    dependsOn: 'build'
-    jobs:
-    - job: 'publish'
-      steps:
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish APK to artifacts'
-        inputs:
-          PathtoPublish: 'android/app/build/outputs/apk/release'
-          ArtifactName: 'android'
-          publishLocation: Container
+      - job: 'publish'
+        steps:
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish APK to artifacts'
+          inputs:
+            PathtoPublish: 'android/app/build/outputs/apk/release'
+            ArtifactName: 'android'
+            publishLocation: Container
