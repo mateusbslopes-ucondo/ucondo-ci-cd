@@ -4,23 +4,35 @@ trigger:
 pool:
   vmImage: macos-latest
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSource: 'spec'
-    versionSpec: '18.18.x'
+parameters:
+  - name: whitelabels
+    type: object
+    default:
+      - name: ucondo
+      - name: mrv
 
-- script: yarn install
-  displayName: Install Dependencies
+jobs: 
+  - job: 'prebuild'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '18.18.x'
 
-- script: |
-    cd android
-    EXPO_PUBLIC_WHITELABEL=$(EXPO_PUBLIC_WHITELABEL) && ./gradlew app:assembleRelease
-  displayName: Generate apk
+    - script: yarn install
+      displayName: Install Dependencies
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish APK to artifacts'
-  inputs:
-    PathtoPublish: 'android/app/build/outputs/apk/release'
-    ArtifactName: 'android'
-    publishLocation: Container
+  - ${{ each whitelabel in parameters.whitelabels }}:
+    - job: 'run_for_each_whitelabel_${{ whitelabel.name }}'
+      displayName: 'Using ${{ upper(whitelabel.name) }} whitelabel'
+      steps:
+        - script: cd android && EXPO_PUBLIC_WHITELABEL=$(whitelabel.name) && ./gradlew app:assembleRelease
+
+  - job: 'publish'
+    steps:
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish APK to artifacts'
+      inputs:
+        PathtoPublish: 'android/app/build/outputs/apk/release'
+        ArtifactName: 'android'
+        publishLocation: Container
