@@ -27,7 +27,7 @@ steps:
   - task: PublishBuildArtifacts@1
     displayName: 'Publish ${{ whitelabel.name }} whitelabel APK to artifacts'
     inputs:
-      PathtoPublish: '${{ whitelabel.name }}'
-      ArtifactName: 'android'
+      PathtoPublish: 'android/app/build/outputs/apk/release'
+      ArtifactName: '${{ whitelabel.name }}'
       publishLocation: Container
 
