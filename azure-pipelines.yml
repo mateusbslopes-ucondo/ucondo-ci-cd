@@ -11,30 +11,22 @@ parameters:
       - name: ucondo
       - name: mrv
 
-stages: 
-  - stage: 'build'
-    jobs:
-      - job: 'prebuild'
-        steps:
-        - task: NodeTool@0
-          inputs:
-            versionSource: 'spec'
-            versionSpec: '18.18.x'
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSource: 'spec'
+    versionSpec: '18.18.x'
 
-        - script: yarn install
-          displayName: Install Dependencies
+- script: yarn install
+  displayName: Install Dependencies
 
-      - ${{ each whitelabel in parameters.whitelabels }}:
-        - job: 'run_for_each_whitelabel_${{ whitelabel.name }}'
-          displayName: 'Using ${{ whitelabel.name }} whitelabel'
-          steps:
-            - script: cd android && EXPO_PUBLIC_WHITELABEL=${{ whitelabel.name }} && ./gradlew app:assembleRelease
+- ${{ each whitelabel in parameters.whitelabels }}:
+  - script: cd android && EXPO_PUBLIC_WHITELABEL=${{ whitelabel.name }} && ./gradlew app:assembleRelease
+    displayName: 'Using ${{ whitelabel.name }} whitelabel'
 
-      - job: 'publish'
-        steps:
-        - task: PublishBuildArtifacts@1
-          displayName: 'Publish APK to artifacts'
-          inputs:
-            PathtoPublish: 'android/app/build/outputs/apk/release'
-            ArtifactName: 'android'
-            publishLocation: Container
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish APK to artifacts'
+  inputs:
+    PathtoPublish: 'android/app/build/outputs/apk/release'
+    ArtifactName: 'android'
+    publishLocation: Container
