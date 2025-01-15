@@ -24,9 +24,9 @@ jobs:
 
   - ${{ each whitelabel in parameters.whitelabels }}:
     - job: 'run_for_each_whitelabel_${{ whitelabel.name }}'
-      displayName: 'Using ${{ upper(whitelabel.name) }} whitelabel'
+      displayName: 'Using ${{ whitelabel.name }} whitelabel'
       steps:
-        - script: cd android && EXPO_PUBLIC_WHITELABEL=$(whitelabel.name) && ./gradlew app:assembleRelease
+        - script: cd android && EXPO_PUBLIC_WHITELABEL=${{ whitelabel.name }} && ./gradlew app:assembleRelease
 
   - job: 'publish'
     steps:
