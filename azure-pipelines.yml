@@ -17,3 +17,10 @@ steps:
     cd android
     ./gradlew app:assembleRelease
   displayName: Generate apk
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish APK to artifacts'
+  inputs:
+    PathtoPublish: 'android/app/build/outputs/apk/release'
+    ArtifactName: 'android'
+    publishLocation: Container
