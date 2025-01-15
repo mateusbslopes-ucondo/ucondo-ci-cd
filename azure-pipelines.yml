@@ -22,10 +22,10 @@ steps:
 
 - ${{ each whitelabel in parameters.whitelabels }}:
   - script: cd android && EXPO_PUBLIC_WHITELABEL=${{ whitelabel.name }} && ./gradlew app:assembleRelease
-    displayName: 'Using ${{ whitelabel.name }} whitelabel'
+    displayName: 'Build ${{ whitelabel.name }} whitelabel'
 
   - task: PublishBuildArtifacts@1
-    displayName: 'Publish APK to artifacts'
+    displayName: 'Publish ${{ whitelabel.name }} whitelabel APK to artifacts'
     inputs:
       PathtoPublish: '${{ whitelabel.name }}'
       ArtifactName: 'android'
