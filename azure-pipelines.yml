@@ -15,7 +15,7 @@ steps:
 
 - script: |
     cd android
-    ./gradlew app:assembleRelease
+    EXPO_PUBLIC_WHITELABEL=$(EXPO_PUBLIC_WHITELABEL) && ./gradlew app:assembleRelease
   displayName: Generate apk
 
 - task: PublishBuildArtifacts@1
