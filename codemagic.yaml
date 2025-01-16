@@ -14,8 +14,10 @@ workflows:
           script: |
             cd android
             whitelabels=("ucondo" "mrv")
+            mkdir .temp
             for whitelabel in ${whitelabels[@]}; do
               EXPO_PUBLIC_WHITELABEL=$whitelabel ./gradlew app:assembleRelease
+              cp app/build/outputs/apk/release/*.apk .temp/
             done
     artifacts: 
-       - android/app/build/outputs/apk/release/*.apk
+       - android/.temp/*.apk
