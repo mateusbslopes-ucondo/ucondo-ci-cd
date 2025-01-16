@@ -1,6 +1,6 @@
 workflows:
   sample-workflow:
-    name: android ucondo
+    name: android whitelabels
     instance_type: mac_mini_m2
     environment: 
       vars: 
@@ -12,6 +12,9 @@ workflows:
             npm install
         - name: Build 
           script: |
-            cd android && EXPO_PUBLIC_WHITELABEL=$EXPO_PUBLIC_WHITELABEL && ./gradlew app:assembleRelease
+            cd android
+            whitelabels = ( 'ucondo', 'mrv' )
+            for whitelabel in ${whitelabels[@]}; do
+              EXPO_PUBLIC_WHITELABEL=${EXPO_PUBLIC_WHITELABEL} && ./gradlew app:assembleRelease
     artifacts: 
        - android/app/build/outputs/apk/release/*.apk
