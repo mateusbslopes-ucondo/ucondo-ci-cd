@@ -1,4 +1,4 @@
-workflow:
+workflows:
   sample-workflow:
     name: CodeMagic Sample Workflow
     instance_type: mac_mini_m2
