@@ -1,6 +1,6 @@
 workflows:
   sample-workflow:
-    name: CodeMagic Sample Workflow
+    name: android ucondo
     instance_type: mac_mini_m2
     environment: 
       vars: 
