@@ -17,7 +17,7 @@ workflows:
             mkdir .temp
             for whitelabel in ${whitelabels[@]}; do
               EXPO_PUBLIC_WHITELABEL=$whitelabel ./gradlew app:assembleRelease
-              cp app/build/outputs/apk/release/*.apk .temp/
+              mv app/build/outputs/apk/release/*.apk .temp/
             done
     artifacts: 
        - android/.temp/*.apk
