@@ -13,7 +13,7 @@ workflows:
         - name: Build 
           script: |
             cd android
-            whitelabels = ( 'ucondo', 'mrv' )
+            whitelabels=("ucondo" "mrv")
             for whitelabel in ${whitelabels[@]}; do
               EXPO_PUBLIC_WHITELABEL=${EXPO_PUBLIC_WHITELABEL} && ./gradlew app:assembleRelease
     artifacts: 
